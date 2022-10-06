@@ -1,0 +1,41 @@
+{
+	"name": "congraturatory-letter-for-my-bro",
+	"version": "1.0.0",
+	"description": "congratulation",
+	"main": "init.js",
+	"scripts": {
+		"start": "nodemon src/init.js",
+		"babel:compile": "./node_modules/.bin/babel src --out-dir lib",
+		"dev:assets": "webpack",
+		"dev:server": "nodemon"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kangdaelyeol/mybro.git"
+	},
+	"author": "Daniel-Kang",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/kangdaelyeol/mybro/issues"
+	},
+	"homepage": "https://github.com/kangdaelyeol/mybro#readme",
+	"dependencies": {
+		"express": "^4.18.1",
+		"pug": "^3.0.2"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.18.10",
+		"@babel/core": "^7.19.1",
+		"@babel/node": "^7.19.1",
+		"@babel/preset-env": "^7.19.1",
+		"babel-loader": "^8.2.5",
+		"css-loader": "^6.7.1",
+		"dotenv-webpack": "^8.0.1",
+		"mini-css-extract-plugin": "^2.6.1",
+		"sass": "^1.55.0",
+		"sass-loader": "^13.0.2",
+		"style-loader": "^3.3.1",
+		"webpack": "^5.74.0",
+		"webpack-cli": "^4.10.0"
+	}
+}

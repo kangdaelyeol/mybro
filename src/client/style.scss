@@ -1,0 +1,69 @@
+// Default Setting
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: 'Noto Sans', sans-serif;
+}
+
+body {
+	overflow-x: hidden;
+}
+
+.scene_container { 
+  display: hidden;
+}
+
+.sticky_message {
+  position: fixed;
+  display: block;
+  top:40vh;
+  left: 30vw;
+  opacity: 0;
+  font-size: 70px;
+  font-weight: 700;
+}
+
+.intro_message {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;  
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.canvas_elem {
+  position: fixed;
+  height: 100vh;
+  top: 50vh;
+  left: 50vw;
+  transform: translate3d(-50%, -50%, 0);
+  opacity: 0;
+  z-index: -1;
+}
+
+body#show-scene0 .scene0,
+body#show-scene1 .scene1,
+body#show-scene2 .scene2 {
+  display: block;
+}
+
+.scene0 .canvas_elem {
+  opacity: 1;
+}
+
+// Setting Global style
+
+
+
+canvas {
+	z-index: -1;
+}
+
+// TEMP STYLING
+
+.scene_container {
+	border: black 1px solid;
+}
