@@ -9,7 +9,7 @@ html(lang="en")
   body 
     // Scene 0
     div(class="scene_container scene0")
-      canvas(class="canvas_elem video")
+      canvas(width="720" height="1280" class="canvas_elem video")
       span(class="non-sticky intro_message") Hello BRO
       span(class="sticky_message message_1") Hello, I’m Daniel. How are you?
       span(class="sticky_message message_2") I’m so sorry that I couldn’t make it to the wedding
@@ -17,7 +17,7 @@ html(lang="en")
     // Scene 1
     div(class="scene_container scene1")
       video(class="video_elem" autoplay muted loop)
-        source(src="video/scene2/sample2.mp4")
+        source(src="video/scene2/sample3.mp4")
       span(class="sticky_message message_1")
         | As you can see, I wasn’t good at English before I went to the Australia
       span(class="sticky_message message_2")
@@ -32,7 +32,7 @@ html(lang="en")
     div(class="scene_container scene2")
       // Scene 2 - Video 1
       video(class="video_elem video_1" autoplay muted loop)
-        source(src="video/scene2/sample2.mp4")
+        source(src="video/scene2/s2video1.mp4")
       span(class="sticky_message video1_message1")
        | I wanted to improve my life and I realized I had to challenge myself
       span(class="sticky_message video1_message2")
@@ -45,7 +45,7 @@ html(lang="en")
        | So that’s why I couldn’t be grown, haha
        // Scene 2 - Video 2
       video(class="video_elem video_2" autoplay muted loop)
-        source(src="video/scene2/sample2.mp4")
+        source(src="video/scene2/s2video2.mp4")
       span(class="sticky_message video2_message1")
        | Anyway, I hope you enjoy this letter,
       span(class="sticky_message video2_message2")
@@ -58,7 +58,7 @@ html(lang="en")
        | But the story of going to the decided future is up to you
        // Scene 2 - Video 3
       video(class="video_elem video_3" autoplay muted loop)
-        source(src="video/scene2/sample2.mp4")
+        source(src="video/scene2/s2video3.mp4")
       span(class="sticky_message video3_message1")
        | I believe that you can overcome any situation
       span(class="sticky_message video3_message2")
@@ -69,7 +69,15 @@ html(lang="en")
        | Anyway, I hope you find happiness wherever you are
       span(class="sticky_message video3_message5")
        | I will see a lovely couple after I’m strong
-      
       // Scene 2 - Video 4
       canvas(width='1920' height='1080' class="canvas_elem video_4")
+
+    // Scene 3
+    div(class="scene_container scene3")
+      // Scene 3 - video(canvas)
+      canvas(class="canvas_elem video" width="1080" height="1616")
+      span(class="sticky_message video4_message1")
+       | 결혼을 축하드립니다
+
+
     script(type="module" src="static/js/main.js")

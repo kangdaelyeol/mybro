@@ -27,14 +27,15 @@ body {
 .sticky_message {
 	position: fixed;
 	display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
 	top: 50vh;
 	left: 50vw;
 	opacity: 0;
-	font-size: 70px;
+	font-size: 2rem;
 	font-weight: 700;
+  z-index: 10;
 }
 
 .intro_message {
@@ -43,7 +44,7 @@ body {
 	width: 100vw;
 	justify-content: center;
 	align-items: center;
-	font-size: 50px;
+	font-size: 4rem;
 	font-weight: bold;
 }
 
@@ -75,8 +76,25 @@ canvas {
 	z-index: -1;
 }
 
-.video_2, .video_3 {
-  transition: all .2s ease-in;
+.video_2,
+.video_3 {
+	transition: all 0.8s ease-in-out;
+}
+
+.video_1 {
+	z-index: -4;
+}
+
+.video_4 {
+	z-index: -3;
+	background-color: gainsboro;
+}
+.video_2 {
+	z-index: -2;
+}
+
+.video_3 {
+	z-index: -1;
 }
 
 // TEMP STYLING

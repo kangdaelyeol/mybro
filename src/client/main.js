@@ -7,7 +7,7 @@ let currentScene = 0;
 const RangeForTransY = 15;
 
 const VideoCount = 1;
-const ImgCount = [271];
+const ImgCount = [10, 10];
 const imgArr = [];
 
 const sceneArr = [
@@ -126,7 +126,7 @@ const sceneArr = [
 	{
 		type: 'sticky',
 		height: 0,
-		heightMultiple: 10,
+		heightMultiple: 15,
 		obj: {
 			scene: document.querySelector('.scene2'),
 			v3: document.querySelector('.video_1'), // 0 ~ 0.2
@@ -151,14 +151,55 @@ const sceneArr = [
 		},
 		value: {
 			v3: {
+				// 0.1 ~ 0.3
 				opacityIn: [0, 0.1, 0, 1],
 				opacityOut: [0.5, 0.55, 1, 0],
 				threshold: 0.3,
 				SR: 0,
-				WR: 0
+				WR: 0,
+			},
+			// message 1 (0.1 ~ 0.14)
+			m1: {
+				opacityIn: [0.1, 0.11, 0, 1],
+				opacityOut: [0.13, 0.14, 1, 0],
+				translateYIn: [0.1, 0.11, RangeForTransY, 0],
+				translateYOut: [0.13, 0.14, 0, -RangeForTransY],
+				threshold: 0.12,
+			},
+			// message 2 (0.14 ~ 0.18)
+			m2: {
+				opacityIn: [0.14, 0.15, 0, 1],
+				opacityOut: [0.17, 0.18, 1, 0],
+				translateYIn: [0.14, 0.15, RangeForTransY, 0],
+				translateYOut: [0.17, 0.18, 0, -RangeForTransY],
+				threshold: 0.16,
+			},
+			// message 3 (0.18 ~ 0.22)
+			m3: {
+				opacityIn: [0.18, 0.19, 0, 1],
+				opacityOut: [0.21, 0.22, 1, 0],
+				translateYIn: [0.18, 0.19, RangeForTransY, 0],
+				translateYOut: [0.21, 0.22, 0, -RangeForTransY],
+				threshold: 0.2,
+			},
+			// message 4 (0.22 ~ 0.26)
+			m4: {
+				opacityIn: [0.22, 0.23, 0, 1],
+				opacityOut: [0.25, 0.26, 1, 0],
+				translateYIn: [0.22, 0.23, RangeForTransY, 0],
+				translateYOut: [0.25, 0.26, 0, -RangeForTransY],
+				threshold: 0.24,
+			},
+			// message 5(0.26 ~ 0.3)
+			m5: {
+				opacityIn: [0.26, 0.27, 0, 1],
+				opacityOut: [0.29, 0.3, 1, 0],
+				translateYIn: [0.26, 0.27, RangeForTransY, 0],
+				translateYOut: [0.29, 0.3, 0, -RangeForTransY],
+				threshold: 0.28,
 			},
 			v4: {
-				threshold: 0.3,
+				threshold: [0.3, 0.75], // videoIn(0.3) -> v5In(Overpainting)(0.5) -> videoOut(0.75)
 				rotateIn: 90,
 				rotateOut: 0,
 				// translateY(In, Out) will be adjusted after "setSize" method executed
@@ -166,10 +207,50 @@ const sceneArr = [
 				translateYOut: 0,
 				SR: 0,
 				WR: 0,
-				fixedWidth: 0
+				fixedWidth: 0,
+			},
+			// message 6 (0.3 ~ 0.34)
+			m6: {
+				opacityIn: [0.3, 0.31, 0, 1],
+				opacityOut: [0.33, 0.34, 1, 0],
+				translateYIn: [0.3, 0.31, RangeForTransY, 0],
+				translateYOut: [0.33, 0.34, 0, -RangeForTransY],
+				threshold: 0.32,
+			},
+			// message 7 (0.34 ~ 0.38)
+			m7: {
+				opacityIn: [0.34, 0.35, 0, 1],
+				opacityOut: [0.37, 0.38, 1, 0],
+				translateYIn: [0.34, 0.35, RangeForTransY, 0],
+				translateYOut: [0.37, 0.38, 0, -RangeForTransY],
+				threshold: 0.36,
+			},
+			// message 8 (0.38 ~ 0.42)
+			m8: {
+				opacityIn: [0.38, 0.39, 0, 1],
+				opacityOut: [0.41, 0.42, 1, 0],
+				translateYIn: [0.38, 0.39, RangeForTransY, 0],
+				translateYOut: [0.41, 0.42, 0, -RangeForTransY],
+				threshold: 0.4,
+			},
+			// message 9 (0.42 ~ 0.46)
+			m9: {
+				opacityIn: [0.42, 0.43, 0, 1],
+				opacityOut: [0.45, 0.46, 1, 0],
+				translateYIn: [0.42, 0.43, RangeForTransY, 0],
+				translateYOut: [0.45, 0.46, 0, -RangeForTransY],
+				threshold: 0.44,
+			},
+			// message 10 (0.46 ~ 0.5)
+			m10: {
+				opacityIn: [0.46, 0.47, 0, 1],
+				opacityOut: [0.49, 0.5, 1, 0],
+				translateYIn: [0.46, 0.47, RangeForTransY, 0],
+				translateYOut: [0.49, 0.5, 0, -RangeForTransY],
+				threshold: 0.48,
 			},
 			v5: {
-				threshold: 0.3,
+				threshold: [0.5, 0.75], // videoIn(0.5) -> videoOut(0.75)
 				rotateIn: 90,
 				rotateOut: 0,
 				// translateY(In, Out) will be adjusted after "setSize" method executed
@@ -177,13 +258,72 @@ const sceneArr = [
 				translateYOut: 0,
 				SR: 0,
 				WR: 0,
-				fixedWidth: 0
+				fixedWidth: 0,
+			},
+			// message 11 (0.5 ~ 0.55)
+			m11: {
+				opacityIn: [0.5, 0.51, 0, 1],
+				opacityOut: [0.54, 0.55, 1, 0],
+				translateYIn: [0.5, 0.51, RangeForTransY, 0],
+				translateYOut: [0.54, 0.55, 0, -RangeForTransY],
+				threshold: 0.525,
+			},
+			// message 12 (0.55 ~ 0.6)
+			m12: {
+				opacityIn: [0.55, 0.56, 0, 1],
+				opacityOut: [0.59, 0.6, 1, 0],
+				translateYIn: [0.55, 0.56, RangeForTransY, 0],
+				translateYOut: [0.59, 0.6, 0, -RangeForTransY],
+				threshold: 0.575,
+			},
+			// message 13 (0.6 ~ 0.65)
+			m13: {
+				opacityIn: [0.6, 0.61, 0, 1],
+				opacityOut: [0.64, 0.65, 1, 0],
+				translateYIn: [0.6, 0.61, RangeForTransY, 0],
+				translateYOut: [0.64, 0.65, 0, -RangeForTransY],
+				threshold: 0.625,
+			},
+			// message 14 (0.65 ~ 0.7)
+			m14: {
+				opacityIn: [0.65, 0.66, 0, 1],
+				opacityOut: [0.69, 0.7, 1, 0],
+				translateYIn: [0.65, 0.66, RangeForTransY, 0],
+				translateYOut: [0.69, 0.7, 0, -RangeForTransY],
+				threshold: 0.675,
+			},
+			// message 15(0.7 ~ 0.75)
+			m15: {
+				opacityIn: [0.7, 0.71, 0, 1],
+				opacityOut: [0.74, 0.75, 1, 0],
+				translateYIn: [0.7, 0.71, RangeForTransY, 0],
+				translateYOut: [0.74, 0.75, 0, -RangeForTransY],
+				threshold: 0.725,
 			},
 			v6: {
 				// canvas_elem (0.75 ~ 1)
+				threshold: 0.8,
 				opacityIn: [0.55, 0.6, 0, 1],
+				opacityOut: [0.9, 1, 1, 0],
 				SR: 0,
-				WR: 0
+				WR: 0,
+			},
+		},
+	},
+	{
+		// Scene 3
+		type: 'sticky',
+		height: 0,
+		heightMultiple: 3,
+		obj: {
+			scene: document.querySelector('.scene3'),
+			v7: document.querySelector('.scene3 .video'),
+		},
+		value: {
+			v7: {
+				SR: 0,
+				WR: 0,
+				opacityIn: [0, 0.1, 0, 1],
 			},
 		},
 	},
@@ -209,8 +349,7 @@ const setSize = () => {
 	videoArr.push(sceneArr[2].obj.v4); // videoArr[3]
 	videoArr.push(sceneArr[2].obj.v5); // videoArr[4]
 	videoArr.push(sceneArr[2].obj.v6);
-	console.log(videoArr[1].offsetWidth, videoArr[1].width);
-	console.log(videoArr[1].offsetHeight, videoArr[1].height);
+	videoArr.push(sceneArr[3].obj.v7);
 	for (let i = 0; i < videoArr.length; i++) {
 		const HR = videoArr[i].offsetHeight / innerH;
 		const WR = videoArr[i].offsetWidth / bodyW;
@@ -224,20 +363,22 @@ const setSize = () => {
 
 		if (i === 1) sceneArr[i].value.v2.SR = SR;
 
-		if (i > 1) {
+		if (i > 1 && i < 6) {
+			// v2 ~ v5
 			sceneArr[2].value[`v${i + 1}`].SR = SR;
 			sceneArr[2].value[`v${i + 1}`].WR = WR;
-			console.log(WR);
 		}
 
 		// Scene2 -> adjust the location of videos(v4, v5)
-		sceneArr[2].value.v4.fixedWidth = sceneArr[2].obj.v4.offsetWidth * sceneArr[2].value.v4.WR;
-		sceneArr[2].value.v5.fixedWidth = sceneArr[2].obj.v5.offsetWidth * sceneArr[2].value.v5.WR;
+		sceneArr[2].value.v4.fixedWidth =
+			sceneArr[2].obj.v4.offsetWidth * sceneArr[2].value.v4.WR;
+		sceneArr[2].value.v5.fixedWidth =
+			sceneArr[2].obj.v5.offsetWidth * sceneArr[2].value.v5.WR;
 
 		videoArr[3].style.transfrom = `scale(${SR}) translate3d(-${
 			(1 / SR) * 50
 		}%, -${(1 / SR) * 100}%, 0)`;
-		videoArr[3].style.transfrom = `scale(${SR}) translate3d(-${
+		videoArr[4].style.transfrom = `scale(${SR}) translate3d(-${
 			(1 / SR) * 50
 		}%, ${(1 / SR) * 100}%, 0)`;
 	}
@@ -330,12 +471,22 @@ const imgLoad = () => {
 			const img = new Image();
 			img.src = `video/scene${i + 1}/sample-${j + 1}.jpg`;
 			img.addEventListener('load', () => {
-				I_Arr.push(img);
+				I_Arr[j] = img;
 			});
 		}
 		// push I_Arr in imgArr
 		imgArr.push(I_Arr);
 	}
+	const v7_Arr = [];
+	// IMG Load for v7
+	for (let i = 0; i < 2; i++) {
+		const img = new Image();
+		img.src = `video/scene3/sample${i + 1}.jpeg`;
+		img.addEventListener('load', () => {
+			v7_Arr[i] = img;
+		});
+	}
+	imgArr.push(v7_Arr);
 };
 
 // ** Play Animation !important
@@ -352,7 +503,7 @@ const playAnimaiton = (ratio) => {
 		case 0: // SCENE 0
 			// Img -> 271 // range of Img: 0 ~ 270
 			const imgIndex = Math.round(ratio * (ImgCount[currentScene] - 1));
-			const can = sceneArr[currentScene].obj.v1;
+			const can = CObj.v1;
 			const cont = can.getContext('2d');
 			cont.drawImage(imgArr[currentScene][imgIndex], 0, 0);
 
@@ -409,6 +560,10 @@ const playAnimaiton = (ratio) => {
 
 			// video element in other scenes shouldn't be seen
 			sceneArr[1].obj.v2.style.opacity = 0;
+			sceneArr[2].obj.v3.style.opacity = 0;
+			sceneArr[2].obj.v4.style.opacity = 0;
+			sceneArr[2].obj.v5.style.opacity = 0;
+			sceneArr[3].obj.v7.style.opacity = 0;
 			break;
 		case 1: // Scene 1
 			// Video Elem
@@ -487,8 +642,11 @@ const playAnimaiton = (ratio) => {
 
 			// videos in other scenes shouldn't be seen
 			sceneArr[0].obj.v1.style.opacity = 0;
+			sceneArr[2].obj.v4.style.opacity = 0;
+			sceneArr[2].obj.v5.style.opacity = 0;
+			sceneArr[3].obj.v7.style.opacity = 0;
 			break;
-		case 2:
+		case 2: // Scene 2
 			// V3
 			if (ratio < CVal.v3.threshold) {
 				op = getValForElement(CVal.v3.opacityIn, ratio);
@@ -497,10 +655,80 @@ const playAnimaiton = (ratio) => {
 			}
 			CObj.v3.style.opacity = op;
 
+			// V4 - Video Out
+			if (ratio < CVal.v4.threshold[0] || ratio > CVal.v4.threshold[1]) {
+				CObj.v4.style.transform = `scale(${CVal.v4.SR}) translate3d(-${
+					(1 / CVal.v4.SR) * 50
+				}%, ${(1 / CVal.v4.SR) * 300}%, 0) rotate(90deg)`;
+			} else {
+				CObj.v4.style.transform = `scale(${CVal.v4.SR}) translate3d(-${
+					(1 / CVal.v4.SR) * 50
+				}%, -${(1 / CVal.v4.SR) * 50}%, 0) rotate(0deg)`;
+			}
+
+			// V5 - Video Out
+			if (ratio < CVal.v5.threshold[0] || ratio > CVal.v5.threshold[1]) {
+				CObj.v5.style.transform = `scale(${CVal.v5.SR}) translate3d(-${
+					(1 / CVal.v5.SR) * 50
+				}%, -${(1 / CVal.v5.SR) * 300}%, 0) rotate(90deg)`;
+			} else {
+				CObj.v5.style.transform = `scale(${CVal.v5.SR}) translate3d(-${
+					(1 / CVal.v5.SR) * 50
+				}%, -${(1 / CVal.v5.SR) * 50}%, 0) rotate(0deg)`;
+			}
+			CObj.v4.style.opacity = 1;
+			CObj.v5.style.opacity = 1;
+			// V6 -> opacity
+			if (ratio < CVal.v6.threshold) {
+				op = getValForElement(CVal.v6.opacityIn, ratio);
+			} else {
+				op = getValForElement(CVal.v6.opacityOut, ratio);
+			}
+			CObj.v6.style.opacity = op;
+			// Location of Message
+
+			for (let i = 0; i < 15; i++) {
+				if (ratio < CVal[`m${i + 1}`].threshold) {
+					op = getValForElement(CVal[`m${i + 1}`].opacityIn, ratio);
+					transY = getValForElement(CVal[`m${i + 1}`].translateYIn, ratio);
+				} else {
+					op = getValForElement(CVal[`m${i + 1}`].opacityOut, ratio);
+					transY = getValForElement(CVal[`m${i + 1}`].translateYOut, ratio);
+
+				}
+				fixedY = CObj[`message${i+1}`].offsetHeight / 2;
+				CObj[`message${i+1}`].style.opacity = op;
+				CObj[`message${i+1}`].style.transform = `translate3d(-50%,${
+					-fixedY + transY
+				}px, 0)`;
+			}
+
+			// V6 -> canvas draw
+			const imgIndex2 = Math.round(ratio * (ImgCount[1] - 1));
+			const can2 = CObj.v6;
+			const cont2 = can2.getContext('2d');
+			cont2.drawImage(imgArr[0][imgIndex2], 0, 0);
+
 			// videos in other scenes shouldn't be seen
 			sceneArr[0].obj.v1.style.opacity = 0;
 			sceneArr[1].obj.v2.style.opacity = 0;
+			sceneArr[3].obj.v7.style.opacity = 0;
 			break;
+		case 3: // Scene 3
+			const can3 = CObj.v7;
+			const con3 = can3.getContext('2d');
+			con3.drawImage(imgArr[1][0], 0, 0);
+			op = getValForElement(CVal.v7.opacityIn, ratio);
+
+			CObj.v7.style.opacity = op;
+
+			// videos in other scenes shouldn't be seen
+			sceneArr[0].obj.v1.style.opacity = 0;
+			sceneArr[1].obj.v2.style.opacity = 0;
+			sceneArr[2].obj.v3.style.opacity = 0;
+			sceneArr[2].obj.v4.style.opacity = 0;
+			sceneArr[2].obj.v5.style.opacity = 0;
+			sceneArr[2].obj.v6.style.opacity = 0;
 		default:
 			break;
 	}
