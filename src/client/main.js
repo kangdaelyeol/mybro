@@ -3,11 +3,13 @@ import './style.scss';
 // global variables
 
 let currentScene = 0;
-
+let rafId = 0;
+let loopTrigger = false;
+let fixedOffsetY = 0;
 const RangeForTransY = 15;
 
-const VideoCount = 1;
-const ImgCount = [10, 10];
+const VideoCount = 2;
+const ImgCount = [287, 374];
 const imgArr = [];
 
 const sceneArr = [
@@ -303,6 +305,7 @@ const sceneArr = [
 			v6: {
 				// canvas_elem (0.75 ~ 1)
 				threshold: 0.8,
+				videoIndex: [0.75, 0.95, 0, ImgCount[1] - 1],
 				opacityIn: [0.55, 0.6, 0, 1],
 				opacityOut: [0.9, 1, 1, 0],
 				SR: 0,
@@ -318,12 +321,23 @@ const sceneArr = [
 		obj: {
 			scene: document.querySelector('.scene3'),
 			v7: document.querySelector('.scene3 .video'),
+			m1: document.querySelector('.scene3 .video4_message1'),
 		},
 		value: {
 			v7: {
 				SR: 0,
 				WR: 0,
 				opacityIn: [0, 0.1, 0, 1],
+				// the Value hasn't decied. (size of canvas height)
+				// it will be adjusted by "setSize" method.
+				overpaintingIn: [0.3, 0.6, 0, 0],
+			},
+			m1: {
+				opacityIn: [0.2, 0.3, 0, 1],
+				opacityOut: [0.4, 0.5, 1, 0],
+				translateYIn: [0.2, 0.3, RangeForTransY, 0],
+				translateYOut: [0.4, 0.5, 0, -RangeForTransY],
+				threshold: 0.35,
 			},
 		},
 	},
@@ -354,10 +368,6 @@ const setSize = () => {
 		const HR = videoArr[i].offsetHeight / innerH;
 		const WR = videoArr[i].offsetWidth / bodyW;
 		const SR = HR < WR ? 1 / HR : 1 / WR;
-		videoArr[i].style.transform = `scale(${SR}) translate3d(-${
-			(1 / SR) * 50
-		}%, -${(1 / SR) * 50}%, 0)`;
-
 		// set SR
 		if (i === 0) sceneArr[i].value.v1.SR = SR;
 
@@ -370,18 +380,28 @@ const setSize = () => {
 		}
 
 		// Scene2 -> adjust the location of videos(v4, v5)
-		sceneArr[2].value.v4.fixedWidth =
-			sceneArr[2].obj.v4.offsetWidth * sceneArr[2].value.v4.WR;
-		sceneArr[2].value.v5.fixedWidth =
-			sceneArr[2].obj.v5.offsetWidth * sceneArr[2].value.v5.WR;
-
-		videoArr[3].style.transfrom = `scale(${SR}) translate3d(-${
-			(1 / SR) * 50
-		}%, -${(1 / SR) * 100}%, 0)`;
-		videoArr[4].style.transfrom = `scale(${SR}) translate3d(-${
-			(1 / SR) * 50
-		}%, ${(1 / SR) * 100}%, 0)`;
+		if (i === 3) {
+			videoArr[i].style.transform = `scale(${SR}) translate3d(-${
+				(1 / SR) * 50
+			}%, ${(1 / SR) * 300}%, 0)`;
+		} else if (i === 4) {
+			videoArr[i].style.transform = `scale(${SR}) translate3d(-${
+				(1 / SR) * 50
+			}%, -${(1 / SR) * 300}%, 0)`;
+		} else {
+			videoArr[i].style.transform = `scale(${SR}) translate3d(-${
+				(1 / SR) * 50
+			}%, -${(1 / SR) * 50}%, 0)`;
+		}
 	}
+
+	sceneArr[2].value.v4.fixedWidth =
+		sceneArr[2].obj.v4.offsetWidth * sceneArr[2].value.v4.WR;
+	sceneArr[2].value.v5.fixedWidth =
+		sceneArr[2].obj.v5.offsetWidth * sceneArr[2].value.v5.WR;
+
+	// determine v7(canvas) height size
+	sceneArr[3].value.v7.overpaintingIn[2] = sceneArr[3].obj.v7.height;
 };
 
 const getCurrentSceneScrollY = () => {
@@ -453,7 +473,6 @@ const getValForElement = (elemArr, currentSceneRatio) => {
 const sceneCheck = () => {
 	// check Current Scene
 	currentScene = getCurrentScene();
-
 	// set Attr of "body"
 	document.body.setAttribute('id', `show-scene${currentScene}`);
 };
@@ -469,7 +488,7 @@ const imgLoad = () => {
 		// load each Imgs
 		for (let j = 0; j < ImgCount[i]; j++) {
 			const img = new Image();
-			img.src = `video/scene${i + 1}/sample-${j + 1}.jpg`;
+			img.src = `video/scene${i + 1}/out${j + 1}.png`;
 			img.addEventListener('load', () => {
 				I_Arr[j] = img;
 			});
@@ -486,7 +505,7 @@ const imgLoad = () => {
 			v7_Arr[i] = img;
 		});
 	}
-	imgArr.push(v7_Arr);
+	imgArr[2] = v7_Arr;
 };
 
 // ** Play Animation !important
@@ -505,7 +524,8 @@ const playAnimaiton = (ratio) => {
 			const imgIndex = Math.round(ratio * (ImgCount[currentScene] - 1));
 			const can = CObj.v1;
 			const cont = can.getContext('2d');
-			cont.drawImage(imgArr[currentScene][imgIndex], 0, 0);
+			console.log(ratio * (ImgCount[currentScene] - 1));
+			if (imgIndex > 0) cont.drawImage(imgArr[currentScene][imgIndex], 0, 0);
 
 			// Video Opacity
 			if (ratio < CVal.v1.threshold) {
@@ -694,20 +714,19 @@ const playAnimaiton = (ratio) => {
 				} else {
 					op = getValForElement(CVal[`m${i + 1}`].opacityOut, ratio);
 					transY = getValForElement(CVal[`m${i + 1}`].translateYOut, ratio);
-
 				}
-				fixedY = CObj[`message${i+1}`].offsetHeight / 2;
-				CObj[`message${i+1}`].style.opacity = op;
-				CObj[`message${i+1}`].style.transform = `translate3d(-50%,${
+				fixedY = CObj[`message${i + 1}`].offsetHeight / 2;
+				CObj[`message${i + 1}`].style.opacity = op;
+				CObj[`message${i + 1}`].style.transform = `translate3d(-50%,${
 					-fixedY + transY
 				}px, 0)`;
 			}
 
 			// V6 -> canvas draw
-			const imgIndex2 = Math.round(ratio * (ImgCount[1] - 1));
+			const imgIndex2 = Math.round(getValForElement(CVal.v6.videoIndex, ratio));
 			const can2 = CObj.v6;
 			const cont2 = can2.getContext('2d');
-			cont2.drawImage(imgArr[0][imgIndex2], 0, 0);
+			cont2.drawImage(imgArr[1][imgIndex2], 0, 0);
 
 			// videos in other scenes shouldn't be seen
 			sceneArr[0].obj.v1.style.opacity = 0;
@@ -717,10 +736,40 @@ const playAnimaiton = (ratio) => {
 		case 3: // Scene 3
 			const can3 = CObj.v7;
 			const con3 = can3.getContext('2d');
-			con3.drawImage(imgArr[1][0], 0, 0);
-			op = getValForElement(CVal.v7.opacityIn, ratio);
 
+			// overYIndex = canvas height size ~ 0
+			const v7Height = CObj.v7.height;
+			const v7Width = CObj.v7.width;
+			const overYIndex = getValForElement(CVal.v7.overpaintingIn, ratio);
+
+			con3.drawImage(imgArr[2][0], 0, 0);
+			// drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+			con3.drawImage(
+				imgArr[2][1],
+				0,
+				overYIndex,
+				v7Width,
+				v7Height - overYIndex,
+				0,
+				overYIndex,
+				v7Width,
+				v7Height - overYIndex
+			);
+
+			op = getValForElement(CVal.v7.opacityIn, ratio);
 			CObj.v7.style.opacity = op;
+
+			// message 1
+			if (ratio < CVal.m1.threshold) {
+				op = getValForElement(CVal.m1.opacityIn, ratio);
+				transY = getValForElement(CVal.m1.translateYIn, ratio);
+			} else {
+				op = getValForElement(CVal.m1.opacityOut, ratio);
+				transY = getValForElement(CVal.m1.translateYOut, ratio);
+			}
+			fixedY = CObj.m1.offsetHeight / 2;
+			CObj.m1.style.opacity = op;
+			CObj.m1.style.transform = `translate3d(-50%,${-fixedY + transY}px, 0)`;
 
 			// videos in other scenes shouldn't be seen
 			sceneArr[0].obj.v1.style.opacity = 0;
@@ -734,20 +783,97 @@ const playAnimaiton = (ratio) => {
 	}
 };
 
+// loop, getCurrentfixedRatio: To make the canvas play smoother
+
+const getCurrentfixedRatio = () => {};
+
+const loop = () => {
+	const threshold = 0.1;
+	const calibratedOffset = scrollY - fixedOffsetY;
+	fixedOffsetY += calibratedOffset * threshold;
+	if (Math.abs(calibratedOffset) < 1) {
+		cancelAnimationFrame(rafId);
+		loopTrigger = false;
+	} else {
+		loopTrigger = true;
+		// Drawing Img
+		sceneCheck();
+		let currentFixedOffsetRatio = 0;
+		// for Scene 0
+		if (currentScene === 0) {
+			currentFixedOffsetRatio = getCurrentfixedRatio(currentScene);
+			// the index of Image to be showed now
+			let imgIndex = Math.round(ratio * (ImgCount[currentScene] - 1));
+			// To prevent to exceed refering index
+			if (imgIndex < 0) imgIndex = 0;
+			else if (imgIndex > IMG_COUNT.scene1 - 1) imgIndex = IMG_COUNT.scene1 - 1;
+			sceneArr[0].objs.canvasContext.drawImage(
+				sceneArr[0].values.imgs[imgIndex],
+				0,
+				0
+			);
+
+			// Section 2
+		} else if (currentScene === 2) {
+			let prevSceneScroll = 0;
+			for (let i = 0; i < 2; i++) {
+				prevSceneScroll += sceneArr[i].heightSize;
+			}
+			currentFixedOffsetRatio = getCurrentfixedRatio(currentScene);
+			let imgIndex__3 = Math.round(
+				currentFixedOffsetRatio * IMG_COUNT.scene2 - 1
+			);
+			if (imgIndex__3 < 0) imgIndex__3 = 0;
+			else if (imgIndex__3 > IMG_COUNT.scene2 - 1)
+				imgIndex__3 = IMG_COUNT.scene2 - 1;
+			sceneArr[2].objs.canvasContext.drawImage(
+				sceneArr[2].values.imgs[imgIndex__3],
+				0,
+				0
+			);
+		}
+	}
+};
+
 // OnWindowScroll
 const onWindowScroll = () => {
-	sceneCheck();
 	const currentSceneRatio = getCurrentSceneRatio();
+	sceneCheck(currentSceneRatio);
 	playAnimaiton(currentSceneRatio);
+	// Todo: Create a separate method to draw an image for the canvas with 'loop' method.
 };
 
 const init = () => {
-	imgLoad();
+	// if previous 'Scrolling value' is not (0, 0) it's possible that the Error is happening.
+	// so we have to use the 'Closer' trigger.
+
+	window.addEventListener('resize', () => {
+		window.location.reload();
+	});
+
+	window.addEventListener('orientationchange', () => {
+		scrollTo(0, 0);
+		location.reload();
+	});
 
 	window.addEventListener('load', () => {
+		document.body.classList.remove('before-loaded');
+		setTimeout(() => {
+			scrollTo(0, 0);
+		}, 100);
+
+		/* before-loaded container won't be removed naturally 
+		if you remove the container as soon as the process of loading is finished */
+		document
+			.querySelector('.loading')
+			.addEventListener('transitionend', (e) => {
+				document.body.removeChild(e.currentTarget);
+			});
+		imgLoad();
 		sceneCheck();
 		setSize();
 	});
+
 	window.addEventListener('scroll', onWindowScroll);
 };
 

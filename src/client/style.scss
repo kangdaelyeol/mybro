@@ -97,4 +97,59 @@ canvas {
 	z-index: -1;
 }
 
-// TEMP STYLING
+
+// before-loaded container
+
+@keyframes circle-loading {
+	0% {
+		stroke-dashoffset: 157;
+	}
+	100% {
+		stroke-dashoffset: -157;
+	}
+}
+
+@keyframes circle-spin {
+	100% {
+		transform: rotateZ(360deg);
+	}
+}
+
+.loading {
+	display: flex;
+	position: fixed;
+	justify-content: center;
+	align-items: center;
+	background: white;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	z-index: 100;
+	transition: 0.5s;
+	opacity: 0;
+}
+
+.before-loaded .scnee_container {
+	// display: none;
+}
+
+
+.loading-circle {
+	width: 54px;
+	height: 54px;
+	animation: circle-spin 2s infinite linear;
+}
+
+.loading-circle circle {
+	stroke: black;
+	stroke-width: 4;
+	stroke-dasharray: 157;
+	fill: transparent;
+	animation: circle-loading 0.7s infinite ease-in-out;
+}
+
+.before-loaded .loading {
+	opacity: 1;
+}
+

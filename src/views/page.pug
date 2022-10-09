@@ -6,10 +6,14 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Document
     link(rel="stylesheet" href="/static/css/style.css")
-  body 
+  body(class="before-loaded")
+    // before-load container 
+    div(class="loading") 
+      svg(class="loading-circle")
+        circle(cx="50%" cy="50%" r="25")
     // Scene 0
     div(class="scene_container scene0")
-      canvas(width="720" height="1280" class="canvas_elem video")
+      canvas(width="720" height="404" class="canvas_elem video")
       span(class="non-sticky intro_message") Hello BRO
       span(class="sticky_message message_1") Hello, I’m Daniel. How are you?
       span(class="sticky_message message_2") I’m so sorry that I couldn’t make it to the wedding
@@ -77,7 +81,9 @@ html(lang="en")
       // Scene 3 - video(canvas)
       canvas(class="canvas_elem video" width="1080" height="1616")
       span(class="sticky_message video4_message1")
-       | 결혼을 축하드립니다
+       | 결혼을
+       br
+       | 축하드립니다
 
 
     script(type="module" src="static/js/main.js")
