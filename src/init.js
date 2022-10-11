@@ -1,5 +1,4 @@
 import express from 'express';
-
 const app = express();
 const PORT = 3000;
 
@@ -11,7 +10,7 @@ app.get('/', (req, res) => {
 
 app.use('/static', express.static('assets'));
 app.use('/video', express.static('src/videoscene'));
-app.use("/client", express.static('src/client'))
+app.use('/client', express.static('src/client'));
 
 app.listen(PORT, () => {
 	console.log(`PORT ${PORT} listening well`);

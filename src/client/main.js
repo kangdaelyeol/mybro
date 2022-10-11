@@ -3,14 +3,15 @@ import './style.scss';
 // global variables
 
 let currentScene = 0;
-let rafId = 0;
-let loopTrigger = false;
-let fixedOffsetY = 0;
 const RangeForTransY = 15;
 
 const VideoCount = 2;
 const ImgCount = [287, 374];
 const imgArr = [];
+
+// cloudflare defalut bucket url
+
+const Basic_URL = 'https://pub-b7f3edbf1c224a028525eec6746ddd09.r2.dev/';
 
 const sceneArr = [
 	// Scene 0
@@ -424,6 +425,7 @@ const getCurrentScene = () => {
 	return sceneVal;
 };
 
+// For painting messages
 const getCurrentSceneRatio = () => {
 	// check Current scene -> use currentScene
 	// get height of currentScene
@@ -437,6 +439,8 @@ const getCurrentSceneRatio = () => {
 
 	return currentSceneRatio;
 };
+
+// For drawing canvas
 
 // get the value for interaction
 const getValForElement = (elemArr, currentSceneRatio) => {
@@ -481,26 +485,41 @@ const sceneCheck = () => {
 const imgLoad = () => {
 	// load Img for Video Each
 	// let i (to decide the index of 'ImgCount' array)
-	for (let i = 0; i < VideoCount; i++) {
-		// define temporary array to push it into imgArr(global)
-		const I_Arr = [];
 
-		// load each Imgs
-		for (let j = 0; j < ImgCount[i]; j++) {
-			const img = new Image();
-			img.src = `video/scene${i + 1}/out${j + 1}.png`;
-			img.addEventListener('load', () => {
-				I_Arr[j] = img;
-			});
-		}
-		// push I_Arr in imgArr
-		imgArr.push(I_Arr);
+	// define temporary array to push it into imgArr(global)
+	const I_Arr1 = [];
+	const I_Arr2 = [];
+
+	// load each Imgs
+	// scene0 img(287) sam2
+	for (let j = 0; j < ImgCount[0]; j++) {
+		const img = new Image();
+		img.src = Basic_URL + `sam${2}/out${j + 1}.png`;
+		img.addEventListener('load', () => {
+			console.log(`img${j} load`);
+			I_Arr1[j] = img;
+		});
 	}
+	// push I_Arr in imgArr
+	imgArr.push(I_Arr1);
+
+	// scene2 img(374) sam1
+	for (let j = 0; j < ImgCount[1]; j++) {
+		const img = new Image();
+		img.src = Basic_URL + `sam${1}/out${j + 1}.png`;
+		img.addEventListener('load', () => {
+			console.log(`img${j} load`);
+			I_Arr2[j] = img;
+		});
+	}
+	// push I_Arr in imgArr
+	imgArr.push(I_Arr2);
+
 	const v7_Arr = [];
 	// IMG Load for v7
 	for (let i = 0; i < 2; i++) {
 		const img = new Image();
-		img.src = `video/scene3/sample${i + 1}.jpeg`;
+		img.src = Basic_URL + `sample${i + 1}.jpeg`;
 		img.addEventListener('load', () => {
 			v7_Arr[i] = img;
 		});
@@ -510,6 +529,8 @@ const imgLoad = () => {
 
 // ** Play Animation !important
 const playAnimaiton = (ratio) => {
+	if (ratio > 1) return;
+
 	// declare variables for playing animaiton
 	let op = 0;
 	let transY = 0;
@@ -524,8 +545,8 @@ const playAnimaiton = (ratio) => {
 			const imgIndex = Math.round(ratio * (ImgCount[currentScene] - 1));
 			const can = CObj.v1;
 			const cont = can.getContext('2d');
-			console.log(ratio * (ImgCount[currentScene] - 1));
-			if (imgIndex > 0) cont.drawImage(imgArr[currentScene][imgIndex], 0, 0);
+			if (imgIndex > 0 && imgIndex < ImgCount[currentScene])
+				cont.drawImage(imgArr[currentScene][imgIndex], 0, 0);
 
 			// Video Opacity
 			if (ratio < CVal.v1.threshold) {
@@ -741,6 +762,7 @@ const playAnimaiton = (ratio) => {
 			const v7Height = CObj.v7.height;
 			const v7Width = CObj.v7.width;
 			const overYIndex = getValForElement(CVal.v7.overpaintingIn, ratio);
+			console.log(overYIndex, ratio);
 
 			con3.drawImage(imgArr[2][0], 0, 0);
 			// drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
@@ -783,64 +805,11 @@ const playAnimaiton = (ratio) => {
 	}
 };
 
-// loop, getCurrentfixedRatio: To make the canvas play smoother
-
-const getCurrentfixedRatio = () => {};
-
-const loop = () => {
-	const threshold = 0.1;
-	const calibratedOffset = scrollY - fixedOffsetY;
-	fixedOffsetY += calibratedOffset * threshold;
-	if (Math.abs(calibratedOffset) < 1) {
-		cancelAnimationFrame(rafId);
-		loopTrigger = false;
-	} else {
-		loopTrigger = true;
-		// Drawing Img
-		sceneCheck();
-		let currentFixedOffsetRatio = 0;
-		// for Scene 0
-		if (currentScene === 0) {
-			currentFixedOffsetRatio = getCurrentfixedRatio(currentScene);
-			// the index of Image to be showed now
-			let imgIndex = Math.round(ratio * (ImgCount[currentScene] - 1));
-			// To prevent to exceed refering index
-			if (imgIndex < 0) imgIndex = 0;
-			else if (imgIndex > IMG_COUNT.scene1 - 1) imgIndex = IMG_COUNT.scene1 - 1;
-			sceneArr[0].objs.canvasContext.drawImage(
-				sceneArr[0].values.imgs[imgIndex],
-				0,
-				0
-			);
-
-			// Section 2
-		} else if (currentScene === 2) {
-			let prevSceneScroll = 0;
-			for (let i = 0; i < 2; i++) {
-				prevSceneScroll += sceneArr[i].heightSize;
-			}
-			currentFixedOffsetRatio = getCurrentfixedRatio(currentScene);
-			let imgIndex__3 = Math.round(
-				currentFixedOffsetRatio * IMG_COUNT.scene2 - 1
-			);
-			if (imgIndex__3 < 0) imgIndex__3 = 0;
-			else if (imgIndex__3 > IMG_COUNT.scene2 - 1)
-				imgIndex__3 = IMG_COUNT.scene2 - 1;
-			sceneArr[2].objs.canvasContext.drawImage(
-				sceneArr[2].values.imgs[imgIndex__3],
-				0,
-				0
-			);
-		}
-	}
-};
-
 // OnWindowScroll
 const onWindowScroll = () => {
 	const currentSceneRatio = getCurrentSceneRatio();
 	sceneCheck(currentSceneRatio);
 	playAnimaiton(currentSceneRatio);
-	// Todo: Create a separate method to draw an image for the canvas with 'loop' method.
 };
 
 const init = () => {
