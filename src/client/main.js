@@ -838,12 +838,13 @@ const init = () => {
 			.addEventListener('transitionend', (e) => {
 				document.body.removeChild(e.currentTarget);
 			});
-		imgLoad();
-		sceneCheck();
-		setSize();
-	});
-
-	window.addEventListener('scroll', onWindowScroll);
-};
-
-init();
+			sceneCheck();
+			setSize();
+		});
+		
+		window.addEventListener('scroll', onWindowScroll);
+	};
+	
+	imgLoad();
+	init();
+	
