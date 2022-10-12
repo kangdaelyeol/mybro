@@ -496,7 +496,6 @@ const imgLoad = () => {
 		const img = new Image();
 		img.src = Basic_URL + `sam${2}/out${j + 1}.png`;
 		img.addEventListener('load', () => {
-			console.log(`img${j} load`);
 			I_Arr1[j] = img;
 		});
 	}
@@ -508,7 +507,6 @@ const imgLoad = () => {
 		const img = new Image();
 		img.src = Basic_URL + `sam${1}/out${j + 1}.png`;
 		img.addEventListener('load', () => {
-			console.log(`img${j} load`);
 			I_Arr2[j] = img;
 		});
 	}
@@ -762,7 +760,6 @@ const playAnimaiton = (ratio) => {
 			const v7Height = CObj.v7.height;
 			const v7Width = CObj.v7.width;
 			const overYIndex = getValForElement(CVal.v7.overpaintingIn, ratio);
-			console.log(overYIndex, ratio);
 
 			con3.drawImage(imgArr[2][0], 0, 0);
 			// drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
