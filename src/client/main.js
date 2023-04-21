@@ -6,7 +6,7 @@ let currentScene = 0;
 const RangeForTransY = 15;
 
 const VideoCount = 2;
-const ImgCount = [287, 374];
+const ImgCount = [101, 125];
 const imgArr = [];
 
 // cloudflare defalut bucket url
@@ -490,11 +490,13 @@ const imgLoad = () => {
 	const I_Arr1 = [];
 	const I_Arr2 = [];
 
+
+		
 	// load each Imgs
-	// scene0 img(287) sam2
+	// scene0 img(101) scene0
 	for (let j = 0; j < ImgCount[0]; j++) {
 		const img = new Image();
-		img.src = Basic_URL + `sam${2}/out${j + 1}.png`;
+		img.src = Basic_URL + `scene${0}/out${j + 1}.jpg`;
 		img.addEventListener('load', () => {
 			I_Arr1[j] = img;
 		});
@@ -502,10 +504,10 @@ const imgLoad = () => {
 	// push I_Arr in imgArr
 	imgArr.push(I_Arr1);
 
-	// scene2 img(374) sam1
+	// scene2 img(125) scene2
 	for (let j = 0; j < ImgCount[1]; j++) {
 		const img = new Image();
-		img.src = Basic_URL + `sam${1}/out${j + 1}.png`;
+		img.src = Basic_URL + `scene${2}/out${j + 1}.jpg`;
 		img.addEventListener('load', () => {
 			I_Arr2[j] = img;
 		});
@@ -810,7 +812,7 @@ const onWindowScroll = () => {
 };
 
 const init = () => {
-	// if previous 'Scrolling value' is not (0, 0) it's possible that the Error is happening.
+	// if previous 'Scrolling value' is not (0, 0) it's possible that the Error causes.
 	// so we have to use the 'Closer' trigger.
 
 	window.addEventListener('resize', () => {

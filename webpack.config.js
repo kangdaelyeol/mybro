@@ -7,6 +7,7 @@ module.exports = {
 			filename: 'css/style.css',
 		}),
 	],
+	mode:"development",
 	entry: path.resolve(__dirname, 'src/client/main.js'),
 	output: {
 		path: path.resolve(__dirname, 'assets'),
