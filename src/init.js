@@ -1,5 +1,7 @@
 import express from 'express';
-import "dotenv/config";
+import 'dotenv/config';
+import cors from 'cors';
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -8,6 +10,8 @@ app.set('views', process.cwd() + '/src/views');
 app.get('/', (req, res) => {
 	res.render('page');
 });
+
+app.use(cors());
 
 app.use('/static', express.static('assets'));
 app.use('/video', express.static('src/videoscene'));

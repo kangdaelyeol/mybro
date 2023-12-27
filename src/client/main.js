@@ -8,9 +8,7 @@ const RangeForTransY = 15;
 const VideoCount = 2;
 const ImgCount = [101, 125];
 const imgArr = [];
-
 // cloudflare defalut bucket url
-
 const Basic_URL = 'https://pub-b7f3edbf1c224a028525eec6746ddd09.r2.dev/';
 
 const sceneArr = [
@@ -490,8 +488,6 @@ const imgLoad = () => {
 	const I_Arr1 = [];
 	const I_Arr2 = [];
 
-
-		
 	// load each Imgs
 	// scene0 img(101) scene0
 	for (let j = 0; j < ImgCount[0]; j++) {
@@ -837,13 +833,12 @@ const init = () => {
 			.addEventListener('transitionend', (e) => {
 				document.body.removeChild(e.currentTarget);
 			});
-			sceneCheck();
-			setSize();
-		});
-		
-		window.addEventListener('scroll', onWindowScroll);
-	};
-	
-	imgLoad();
-	init();
-	
+		sceneCheck();
+		setSize();
+	});
+
+	window.addEventListener('scroll', onWindowScroll);
+};
+
+imgLoad();
+init();

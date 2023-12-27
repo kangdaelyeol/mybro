@@ -23,6 +23,7 @@
 	},
 	"homepage": "https://github.com/kangdaelyeol/mybro#readme",
 	"dependencies": {
+		"cors": "^2.8.5",
 		"dotenv": "^16.0.3",
 		"express": "^4.18.1",
 		"pug": "^3.0.2"
